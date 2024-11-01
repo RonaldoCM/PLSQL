@@ -65,11 +65,11 @@ A coluna DESCRIPTIONERROR pode ser nula e recebe a mensagem de erro tratada dent
 A gravação do pedido e itens, exige a atomicidade da transação de inserção, ou seja, que os itens sejam gravados apenas quando o pedido também estiver persistido.
  Por esse motivo, na Procedure PROCESSAR_PEDIDO o Commit está ao final de todo o procedimento.
 Criei um tratamento de exceção geral para eventualidades na execução com o controle de uma variável auxiliar p_status para controlar os pontos conhecidos de tratamento de validações.
-  * p_status = Inicializa 0 e se todo o procedimento de inserção ocorrer corretamente;
-  * p_status = 1 (receberá o valor 1);
-  * p_status = 2 (quando o XML não tiver itens);
-  * p_status = 3 (quando o XML tiver itens duplicados).
-  * 
+     * p_status = Inicializa 0 e se todo o procedimento de inserção ocorrer corretamente;
+     * p_status = 1 (receberá o valor 1);
+     * p_status = 2 (quando o XML não tiver itens);
+     * p_status = 3 (quando o XML tiver itens duplicados).
+    
 A princípio havia inserido o levantamento de exceção do tipo RAISE_APPLICATION_ERROR, entretanto, o tratamento das exceções com esse tipo de recurso,
   impediria o controle das chamadas em Loop que realizei através de bloco anônimo BlocoAnonimoProcessarPedido.sql, que envio como parte do procedimento para execução da Package.
 Em resumo p_status pode ser incrementado internamente com mais validações, entretanto, quando retornar para a chamada do bloco anônimo
