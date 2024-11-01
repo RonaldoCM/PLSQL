@@ -85,8 +85,8 @@ Na implementação utilizei o recurso DBMS_OUTPUT.PUT_LINE que exibe no Client o
 <img src="https://github.com/RonaldoCM/PLSQL/blob/main/PLSQL/Imagens/saidaScript.png" alt="Saída Script">
 
 Para isso, é necessário habilitar o recurso SERVEROUTPUT caso não esteja habilitado.
-  --HABILITA O SERVEROUTPUT DO SQLDEVELOPER
-  SET SERVEROUTPUT ON;
+  * --HABILITA O SERVEROUTPUT DO SQLDEVELOPER
+  * SET SERVEROUTPUT ON;
 
 O modelo acima está formatado segundo a chamada do bloco anônimo BlocoAnonimoConsultaItensPedido.sql, que seguirá no repositório.
 Outra forma pragmática de visualizar esse resultado é executando um select simples diretamente na tabela de itens, ou relacionando-a com a tabela de Ordens.
@@ -99,7 +99,8 @@ Particularmente eu não conhecia esse recurso do Oracle. Tentei utilizá-lo sem 
 Então, diante disso, tive que procurar outro recurso e encontrei o XMLTABLE, que também nunca havia utilizado, pois as experiências que tive com mapeamento de arquivos XML,
 foram utilizando linguagem de alto nível ( C# ).
 XMLTABLE mapeia o resultado de uma avaliação XQuery em linhas e colunas relacionais. Você pode consultar o resultado retornado pela função como uma tabela relacional virtual usando SQL.
-* Manipular o XML
+
+## Manipular o XML
 Tive Dificuldades em utilizar os pacotes Oracle, em alguns pontos específicos, por exemplo: não conseguia navegar na árvore XML para pegar o valor do ID da Ordem no nó ancestral.
 Isso me fez perder muito tempo.
 Posteriormente, percebi que a dificuldade em realizar esse procedimento era em razão de o pedido ainda não ter sido persistido em banco,
