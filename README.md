@@ -49,24 +49,27 @@ A Procedure PROCEDURE PROCESSAR_PEDIDO recebe dois parâmetros:
 ( P_XML_PEDIDO CLOB, p_status OUT NUMBER )
 Os dados que serão processados por essa Procedure são oriundos da tabela ORDERREPOSITORY.
 Para cumprimento dos requisitos do projeto PLSQL iniciei pela criação das tabelas:
+
 * Tabela ORDERREPOSITORY – Esse objeto tem a finalidade de armazenar as inserções realizadas por um sistema qualquer que tenha a função de disparar os XML’s.
    Poderia ser mais prático e apenas criar a Package realizando chamadas por intermédio de um bloco anônimo de forma direta e unitária,
    alcançaria o mesmo efeito, porém pensei em um sistema de controle de registros usando algumas colunas auxiliares como STATUSPROCESSAMENTO para usar o mesmo XML várias vezes podendo 
    reprocessa-los, ao invés de manter os inserts descritos, passivos de alguma confusão na edição.
    A coluna STATUSPROCESSAMENTO tem a ideia de controlar se o registro já foi processado ou não, seguindo a legenda:
-    STATUSPROCESSAMENTO = 0 [Não processado]
-    STATUSPROCESSAMENTO = 1 [Processado com sucesso]
-    STATUSPROCESSAMENTO = 3 [Processado com erro]
+    * STATUSPROCESSAMENTO = 0 [Não processado]
+    * STATUSPROCESSAMENTO = 1 [Processado com sucesso]
+    * STATUSPROCESSAMENTO = 3 [Processado com erro]
+
 Paralelamente a coluna de DATE_PROCESSAMENTO será inserida assim que o processamento ocorrer, independente do resultado do STATUSPROCESSAMENTO.
 A coluna DESCRIPTIONERROR pode ser nula e recebe a mensagem de erro tratada dentro da Package de acordo com as situações mapeadas e retornadas pela variável p_status
  enviada (com valor default de criação do tipo Number) e retornada pela Procedure, com valor atualizado internamente na procedure.
 A gravação do pedido e itens, exige a atomicidade da transação de inserção, ou seja, que os itens sejam gravados apenas quando o pedido também estiver persistido.
  Por esse motivo, na Procedure PROCESSAR_PEDIDO o Commit está ao final de todo o procedimento.
 Criei um tratamento de exceção geral para eventualidades na execução com o controle de uma variável auxiliar p_status para controlar os pontos conhecidos de tratamento de validações.
-  p_status = Inicializa 0 e se todo o procedimento de inserção ocorrer corretamente;
-  p_status = 1 (receberá o valor 1);
-  p_status = 2 (quando o XML não tiver itens);
-  p_status = 3 (quando o XML tiver itens duplicados).
+  * p_status = Inicializa 0 e se todo o procedimento de inserção ocorrer corretamente;
+  * p_status = 1 (receberá o valor 1);
+  * p_status = 2 (quando o XML não tiver itens);
+  * p_status = 3 (quando o XML tiver itens duplicados).
+  * 
 A princípio havia inserido o levantamento de exceção do tipo RAISE_APPLICATION_ERROR, entretanto, o tratamento das exceções com esse tipo de recurso,
   impediria o controle das chamadas em Loop que realizei através de bloco anônimo BlocoAnonimoProcessarPedido.sql, que envio como parte do procedimento para execução da Package.
 Em resumo p_status pode ser incrementado internamente com mais validações, entretanto, quando retornar para a chamada do bloco anônimo
